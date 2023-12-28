@@ -1,8 +1,14 @@
 <script setup>
-import { onMounted, reactive, ref, toRaw, watch } from 'vue';
+import { computed, onMounted, reactive, ref, toRaw, watch } from 'vue';
 import { BicycleService } from '@/api/index.js';
 
-const statusOptionsList = ['Available', 'Unavailable', 'Busy'];
+const status = {
+    available: 'Available',
+    unavailable: 'Unavailable',
+    busy: 'Busy',
+};
+
+const statusOptionsList = Object.values(status);
 const bicycleData = reactive({ data: null });
 
 const initFormData = {
@@ -85,6 +91,7 @@ async function handlePostBicycle() {
     try {
         const { data } = await BicycleService.post(body);
         bicycleData.data = [data, ...bicycleData.data];
+        handleClearForm();
     } catch (e) {
         console.error(e);
     }
@@ -120,7 +127,6 @@ const validateFormData = () => {
     Object.assign(formDataErrors, errors);
 
     return checkIfErrorsExisting(errors);
-    // console.log(errors);
 };
 
 function checkIfErrorsExisting(obj) {
@@ -139,6 +145,35 @@ function validateTextField(input) {
 function validateNumberField(input) {
     return !isNaN(Number(input)) && input !== '';
 }
+
+const totalAmountOfBikes = computed(() => {
+    if (bicycleData.data) {
+        return bicycleData.data.length;
+    }
+    return 0;
+});
+
+const filterBikeListByStatus = (statusCondition) => {
+    if (bicycleData.data) {
+        return bicycleData.data.filter(bicycle => bicycle.status === statusCondition).length;
+    }
+};
+
+const availableBikes = computed(() => {
+    return filterBikeListByStatus(status.available);
+});
+
+const bookedBikes = computed(() => {
+    return filterBikeListByStatus(status.busy);
+});
+
+const averageBikePrice = computed(() => {
+    if (bicycleData.data) {
+        const priceOfAllBicycles = bicycleData.data.reduce((acc, cur) => acc += cur.price, 0);
+        return (priceOfAllBicycles / bicycleData.data.length).toFixed(2);
+    }
+    return 0;
+});
 
 watch(formData, () => {
     if (isFormSent.value) {
@@ -211,7 +246,6 @@ watch(formData, () => {
                             </div>
 
                         </div>
-
                         <div class='form__row'>
                             <div class='form__row--item'>
                                 <input
@@ -265,13 +299,21 @@ watch(formData, () => {
                             <button class='button' type='button' @click='handleClearForm'>Clear</button>
                         </div>
                     </form>
+                    <hr class='break-line' />
+                    <div class='statistics'>
+                        <h3>Statistics</h3>
+                        <p>Total Bikes: <span>{{ totalAmountOfBikes }}</span></p>
+                        <p>Available Bikes: <span>{{ availableBikes }}</span></p>
+                        <p>Booked Bikes: <span>{{ bookedBikes }}</span></p>
+                        <p>Average Bike Cost: <span>{{ averageBikePrice }}</span> UAH/hr</p>
+                    </div>
                 </div>
             </div>
 
         </main>
         <footer class='footer bg'>
             <div class='content-wrapper'>
-                <p>
+                <p class='author__data'>
                     Developer: <span>Sergii Kochetov</span>
                 </p>
             </div>
@@ -298,6 +340,25 @@ watch(formData, () => {
     width: 100%;
 }
 
+.header,
+.footer {
+    color: #E8E8E8;
+}
+
+.footer .content-wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.author__data {
+    color: #CBCACA;
+    font-size: 1.125rem;
+}
+
+.author__data span {
+    color: #F2F2F2;
+}
+
 .main {
     flex: 1;
 }
@@ -305,7 +366,6 @@ watch(formData, () => {
 .main__content {
     display: flex;
     gap: 1.5rem;
-    margin: 1rem 0;
 }
 
 .content-wrapper {
@@ -322,6 +382,7 @@ watch(formData, () => {
     flex: 1;
     flex-direction: column;
     gap: 1.5rem;
+    padding-top: 1.5rem;
 }
 
 
@@ -332,7 +393,10 @@ watch(formData, () => {
 }
 
 .details {
+    border-left: 1px solid #C4C4C4;
     flex: 1;
+    padding-left: 1.5rem;
+    padding-top: 1.5rem;
 }
 
 .border-available {
@@ -400,5 +464,11 @@ watch(formData, () => {
     border: none;
     color: #f2f2f2;
     outline: none;
+}
+
+.break-line {
+    color: #C4C4C4;
+    margin: 1.25rem 0;
+    opacity: 0.375;
 }
 </style>
