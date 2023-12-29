@@ -4,6 +4,12 @@ import { bicycleData } from './bicycles.data.js';
 export const prisma = new PrismaClient();
 
 async function main() {
+    const findMany = await prisma.bicycle.findMany();
+
+    if (findMany.length) {
+        return;
+    }
+
     for (const b of bicycleData) {
         const bicycle = await prisma.bicycle.create({
             data: b,
@@ -12,18 +18,12 @@ async function main() {
     }
 }
 
-// makeBicycle({
-//     id: '78973baff352fb0ffcd1d11e',
-//     name: 'asdasdsd',
-//     price: 'jel',
-// });
-
-// main()
-//     .then(async () => {
-//         await prisma.$disconnect();
-//     })
-//     .catch(async (e) => {
-//         console.error(e);
-//         await prisma.$disconnect();
-//         process.exit(1);
-//     });
+main()
+    .then(async () => {
+        await prisma.$disconnect();
+    })
+    .catch(async (e) => {
+        console.error(e);
+        await prisma.$disconnect();
+        process.exit(1);
+    });
