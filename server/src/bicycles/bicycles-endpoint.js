@@ -1,6 +1,7 @@
 import { makeHttpError } from '../utils/http-error.js';
 import { prisma } from '../db/index.js';
 import { makeBicycle } from './bicycle.js';
+import { InvalidPropertyError } from '../utils/errors.js';
 
 export function makeBicyclesEndpointHandler(bicycleList) {
     return async function handle(httpRequest) {
@@ -17,51 +18,65 @@ export function makeBicyclesEndpointHandler(bicycleList) {
                 return makeHttpError(
                     {
                         statusCode: 405,
-                        errorMessage: `${httpRequest.method} not allowed`,
+                        errorMessage: `The request ${httpRequest.method} method is known by the server but is not supported by the target resource.`,
                     },
                 );
         }
     };
 
     async function getAll() {
-        const data = await bicycleList.findMany();
-
+        const result = await bicycleList.findMany();
         return {
             headers: {
                 'Content-Type': 'application/json',
             },
             statusCode: 200,
-            data: JSON.stringify(data),
+            data: JSON.stringify(result),
         };
     }
 
     async function post(httpRequest) {
-        const { body } = httpRequest;
+        let bicycleData = httpRequest.body;
 
-        if (!body) {
+        if (!bicycleData) {
             return makeHttpError({
                 statusCode: 400,
-                errorMessage: 'Bad request. POST body must be a valid JSON.',
+                errorMessage: 'Bad request. POST body is missing.',
             });
         }
 
-        const bicycle = makeBicycle(body);
+        if (typeof bicycleData === 'string') {
+            try {
+                bicycleData = JSON.parse(bicycleData);
+            } catch {
+                return makeHttpError({
+                    statusCode: 400,
+                    errorMessage: 'Bad request. POST body must be a valid JSON.',
+                });
+            }
+        }
 
-        const data = await bicycleList.create(bicycle);
-
-        return {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            statusCode: 200,
-            data: JSON.stringify(data),
-        };
+        try {
+            const bicycle = makeBicycle(bicycleData);
+            const data = await bicycleList.create(bicycle);
+            return {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                statusCode: 200,
+                data: JSON.stringify(data),
+            };
+        } catch (e) {
+            return makeHttpError({
+                statusCode: e instanceof InvalidPropertyError ? 400 : 500,
+                errorMessage: e.message,
+            });
+        }
     }
 
     async function updateById(httpRequest) {
         const { id } = httpRequest.pathParams;
         const { body } = httpRequest;
-
         const error = await validateId(id);
 
         if (error) {
@@ -69,7 +84,6 @@ export function makeBicyclesEndpointHandler(bicycleList) {
         }
 
         const data = await bicycleList.updateById(id, body);
-
         return {
             headers: {
                 'Content-Type': 'application/json',
@@ -81,7 +95,6 @@ export function makeBicyclesEndpointHandler(bicycleList) {
 
     async function deleteById(httpRequest) {
         const { id } = httpRequest.pathParams;
-
         const error = await validateId(id);
 
         if (error) {
@@ -89,7 +102,6 @@ export function makeBicyclesEndpointHandler(bicycleList) {
         }
 
         const data = await bicycleList.deleteById(id);
-
         return {
             headers: {
                 'Content-Type': 'application/json',

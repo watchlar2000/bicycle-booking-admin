@@ -1,10 +1,10 @@
 import { InvalidPropertyError } from '../utils/errors.js';
 import { ObjectId } from 'mongodb';
+import { propertyRequired, toFixedNumber, upperFirst } from '../utils/common.js';
 
-export function makeBicycle(bicycleData) {
+export function makeBicycle(bicycleData = propertyRequired('bicycleData')) {
     const validBicycle = validate(bicycleData);
     const normalBicycle = normalize(validBicycle);
-
     return Object.freeze(normalBicycle);
 }
 
@@ -16,9 +16,7 @@ function validate(bicycleData) {
     validateTextField('Color', color);
     validateNumberField('Price', price);
     validateNumberField('Wheel size', wheel_size);
-    return {
-        ...bicycleData,
-    };
+    return { ...bicycleData };
 }
 
 function validateTextField(field, input) {
@@ -39,11 +37,14 @@ function validateId(field, id) {
     }
 }
 
-function normalize({ price, wheel_size, ...otherInfo }) {
+function normalize({ name, type, color, wheel_size, price, description, ...other }) {
     return {
-        ...otherInfo,
-        price: +price,
-        wheel_size: +wheel_size,
-        // status: 'Available',
+        ...other,
+        name: upperFirst(name),
+        type: upperFirst(type),
+        color: upperFirst(color),
+        wheel_size: toFixedNumber(wheel_size, 1),
+        price: toFixedNumber(price, 2),
+        description: upperFirst(description),
     };
 }
