@@ -1,4 +1,4 @@
-import { generateId } from '../utils/common.js';
+import { generateId } from '../helpers/common.js';
 
 const ID = new Map();
 

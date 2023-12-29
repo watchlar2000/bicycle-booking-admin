@@ -1,7 +1,7 @@
-import { makeHttpError } from '../utils/http-error.js';
+import { makeHttpError } from '../helpers/http-error.js';
 import { prisma } from '../db/index.js';
 import { makeBicycle } from './bicycle.js';
-import { InvalidPropertyError } from '../utils/errors.js';
+import { InvalidPropertyError } from '../helpers/errors.js';
 
 export function makeBicyclesEndpointHandler(bicycleList) {
     return async function handle(httpRequest) {

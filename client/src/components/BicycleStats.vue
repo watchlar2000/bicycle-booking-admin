@@ -1,9 +1,38 @@
 <script setup>
-defineProps({
-    totalAmountOfBikes: [String, Number],
-    availableBikes: [String, Number],
-    bookedBikes: [String, Number],
-    averageBikePrice: [String, Number],
+import { computed } from 'vue';
+import { status } from '@/helpers/constants.js';
+
+const props = defineProps({
+    bicycleData: Object,
+});
+
+const totalAmountOfBikes = computed(() => {
+    if (props.bicycleData) {
+        return props.bicycleData.length;
+    }
+    return 0;
+});
+
+function filterBikeListByStatus(statusCondition) {
+    if (props.bicycleData) {
+        return props.bicycleData.filter(bicycle => bicycle.status === statusCondition).length;
+    }
+};
+
+const availableBikes = computed(() => {
+    return filterBikeListByStatus(status.available);
+});
+
+const bookedBikes = computed(() => {
+    return filterBikeListByStatus(status.busy);
+});
+
+const averageBikePrice = computed(() => {
+    if (props.bicycleData) {
+        const totalPrice = props.bicycleData.reduce((acc, cur) => acc += cur.price, 0);
+        return (totalPrice / props.bicycleData.length).toFixed(2);
+    }
+    return 0;
 });
 </script>
 

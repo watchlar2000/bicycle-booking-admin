@@ -1,4 +1,4 @@
-export function makeHttpError({ statusCode, errorMessage }) {
+export const makeHttpError = ({ statusCode, errorMessage }) => {
     return {
         headers: {
             'Content-Type': 'application/json',
@@ -9,4 +9,4 @@ export function makeHttpError({ statusCode, errorMessage }) {
             error: errorMessage,
         }),
     };
-}
+};

@@ -1,6 +1,6 @@
-import { InvalidPropertyError } from '../utils/errors.js';
+import { InvalidPropertyError } from '../helpers/errors.js';
 import { ObjectId } from 'mongodb';
-import { propertyRequired, toFixedNumber, upperFirst } from '../utils/common.js';
+import { propertyRequired, toFixedNumber, upperFirst } from '../helpers/common.js';
 
 export function makeBicycle(bicycleData = propertyRequired('bicycleData')) {
     const validBicycle = validate(bicycleData);
@@ -21,7 +21,7 @@ function validate(bicycleData) {
 
 function validateTextField(field, input) {
     if (typeof input === 'string' && input.length < 5) {
-        throw new InvalidPropertyError(`"${field}" must be at least 5-character long`);
+        throw new InvalidPropertyError(`"${field}" must be at least 5 characters long`);
     }
 }
 

@@ -1,5 +1,6 @@
 import express from 'express';
 import { bicycleEndpointHandler } from '../bicycles/index.js';
+import { adaptRequest } from '../helpers/adapt-request.js';
 
 export const router = express.Router();
 
@@ -18,14 +19,5 @@ async function bicyclesHandler(req, res) {
     } catch (e) {
         res.status(500).end();
     }
-}
-
-function adaptRequest(req = {}) {
-    return Object.freeze({
-        path: req.path,
-        method: req.method,
-        pathParams: req.params,
-        body: req.body,
-    });
 }
 
