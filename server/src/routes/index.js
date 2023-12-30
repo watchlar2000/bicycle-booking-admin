@@ -9,7 +9,6 @@ router.all('/bicycles/:id', bicyclesHandler);
 
 async function bicyclesHandler(req, res) {
     const httpRequest = adaptRequest(req);
-    // console.log(httpRequest);
     try {
         const { headers, statusCode, data } =
             await bicycleEndpointHandler(httpRequest);

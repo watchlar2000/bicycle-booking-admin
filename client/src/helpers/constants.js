@@ -1,7 +1,7 @@
 export const MINIMUM_ID_LENGTH = 12;
 export const MINIMUM_TEXT_FIELD_LENGTH = 5;
 
-export const status = {
+export const bicycleStatus = {
     available: 'Available',
     unavailable: 'Unavailable',
     busy: 'Busy',

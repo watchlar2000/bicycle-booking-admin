@@ -1,18 +1,18 @@
 <template>
-    <div class='container'>
-        <header class='header bg'>
-            <div class='content-wrapper'>
-                <slot name='header'></slot>
+    <div class="container">
+        <header class="header bg">
+            <div class="content-wrapper">
+                <slot name="header"></slot>
             </div>
         </header>
-        <main class='main'>
-            <div class='content-wrapper main__content'>
-                <slot name='main'></slot>
+        <main class="main">
+            <div class="content-wrapper main__content">
+                <slot name="main"></slot>
             </div>
         </main>
-        <footer class='footer bg'>
-            <div class='content-wrapper'>
-                <slot name='footer'></slot>
+        <footer class="footer bg">
+            <div class="content-wrapper">
+                <slot name="footer"></slot>
             </div>
         </footer>
     </div>
@@ -37,7 +37,7 @@
 
 .header,
 .footer {
-    color: #E8E8E8;
+    color: #e8e8e8;
 }
 
 .footer .content-wrapper {

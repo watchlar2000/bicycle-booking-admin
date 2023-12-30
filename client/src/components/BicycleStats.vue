@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import { status } from '@/helpers/constants.js';
+import { bicycleStatus } from '@/helpers/constants.js';
 
 const props = defineProps({
     bicycleData: Object,
@@ -15,21 +15,28 @@ const totalAmountOfBikes = computed(() => {
 
 function filterBikeListByStatus(statusCondition) {
     if (props.bicycleData) {
-        return props.bicycleData.filter(bicycle => bicycle.status === statusCondition).length;
+        return props.bicycleData.filter(
+            (bicycle) => bicycle.status === statusCondition,
+        ).length;
     }
-};
+
+    return 0;
+}
 
 const availableBikes = computed(() => {
-    return filterBikeListByStatus(status.available);
+    return filterBikeListByStatus(bicycleStatus.available);
 });
 
 const bookedBikes = computed(() => {
-    return filterBikeListByStatus(status.busy);
+    return filterBikeListByStatus(bicycleStatus.busy);
 });
 
 const averageBikePrice = computed(() => {
-    if (props.bicycleData) {
-        const totalPrice = props.bicycleData.reduce((acc, cur) => acc += cur.price, 0);
+    if (props.bicycleData && props.bicycleData.length) {
+        const totalPrice = props.bicycleData.reduce(
+            (acc, cur) => (acc += cur.price),
+            0,
+        );
         return (totalPrice / props.bicycleData.length).toFixed(2);
     }
     return 0;
@@ -37,13 +44,21 @@ const averageBikePrice = computed(() => {
 </script>
 
 <template>
-    <div class='statistics'>
-        <h3 class='title'>Statistics</h3>
-        <div class='statistics__data-list'>
-            <p>Total Bikes: <span>{{ totalAmountOfBikes }}</span></p>
-            <p>Available Bikes: <span>{{ availableBikes }}</span></p>
-            <p>Booked Bikes: <span>{{ bookedBikes }}</span></p>
-            <p>Average Bike Cost: <span>{{ averageBikePrice }}</span> UAH/hr</p>
+    <div class="statistics">
+        <h3 class="title">Statistics</h3>
+        <div class="statistics__data-list">
+            <p>
+                Total Bikes: <span>{{ totalAmountOfBikes }}</span>
+            </p>
+            <p>
+                Available Bikes: <span>{{ availableBikes }}</span>
+            </p>
+            <p>
+                Booked Bikes: <span>{{ bookedBikes }}</span>
+            </p>
+            <p>
+                Average Bike Cost: <span>{{ averageBikePrice }}</span> UAH/hr
+            </p>
         </div>
     </div>
 </template>
@@ -61,9 +76,9 @@ const averageBikePrice = computed(() => {
     flex-direction: column;
     font-size: 14px;
     font-weight: 400;
-    gap: .375rem;
+    gap: 0.375rem;
     line-height: 22px;
-    margin-top: .5rem;
+    margin-top: 0.5rem;
 }
 
 .statistics__data-list span {

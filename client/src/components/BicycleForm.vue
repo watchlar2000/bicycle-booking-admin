@@ -10,25 +10,30 @@ import {
     validateNumberField,
     validateTextField,
 } from '@/helpers/validate.js';
+import { notify } from '@/helpers/notify.js';
 
 const emit = defineEmits(['add-bicycle']);
 
 const initErrorsData = generateErrorObj();
 const formData = reactive({ ...initFormData });
 const formDataErrors = reactive({ ...initErrorsData });
-const isFormSent = ref(false);
+const isFormTouched = ref(false);
 
 const handleClearForm = () => {
     Object.assign(formData, initFormData);
     Object.assign(formDataErrors, initErrorsData);
-    isFormSent.value = false;
+    isFormTouched.value = false;
 };
 
 async function handlePostBicycle() {
-    isFormSent.value = true;
+    isFormTouched.value = true;
     const validForm = validateFormData();
 
     if (!validForm) {
+        return;
+    }
+
+    if (notify.isVisible) {
         return;
     }
 
@@ -70,7 +75,7 @@ const validateFormData = () => {
 };
 
 watch(formData, () => {
-    if (isFormSent.value) {
+    if (isFormTouched.value) {
         validateFormData();
     }
 });

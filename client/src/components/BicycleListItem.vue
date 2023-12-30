@@ -1,10 +1,10 @@
 <script setup>
-import { status } from '@/helpers/constants.js';
+import { bicycleStatus } from '@/helpers/constants.js';
 import { ref } from 'vue';
 import IconClose from '@/components/shared/IconClose.vue';
 import IconWrapper from '@/components/shared/IconWrapper.vue';
 
-const statusOptionsList = Object.values(status);
+const statusOptionsList = Object.values(bicycleStatus);
 
 const props = defineProps({
     id: String,

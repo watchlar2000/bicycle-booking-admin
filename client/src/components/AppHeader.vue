@@ -1,7 +1,5 @@
 <template>
-    <h1 class='title'>
-        ADMIN.BIKE-BOOKING.COM
-    </h1>
+    <h1 class="title">ADMIN.BIKE-BOOKING.COM</h1>
 </template>
 
 <style scoped>

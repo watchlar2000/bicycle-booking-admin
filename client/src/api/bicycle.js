@@ -20,7 +20,6 @@ export function BicycleDataService(http) {
         return await http.delete(`${BASE_URL}/${id}`);
     }
 
-
     async function updateById(data) {
         const { id, ...body } = data;
         return await http.put(`${BASE_URL}/${id}`, body);
