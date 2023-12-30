@@ -4,12 +4,21 @@ export function makeBicycleList(database) {
         create,
         updateById,
         deleteById,
+        findById,
     });
 
     function findMany() {
         return database.bicycle.findMany({
             orderBy: {
                 created_at: 'desc',
+            },
+        });
+    }
+
+    function findById(id) {
+        return database.bicycle.findUnique({
+            where: {
+                id,
             },
         });
     }

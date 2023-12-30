@@ -15,12 +15,10 @@ export function makeBicyclesEndpointHandler(bicycleList) {
             case 'PUT':
                 return updateById(httpRequest);
             default:
-                return makeHttpError(
-                    {
-                        statusCode: 405,
-                        errorMessage: `The request ${httpRequest.method} method is known by the server but is not supported by the target resource.`,
-                    },
-                );
+                return makeHttpError({
+                    statusCode: 405,
+                    errorMessage: `The request ${httpRequest.method} method is known by the server but is not supported by the target resource.`,
+                });
         }
     };
 
@@ -51,9 +49,27 @@ export function makeBicyclesEndpointHandler(bicycleList) {
             } catch {
                 return makeHttpError({
                     statusCode: 400,
-                    errorMessage: 'Bad request. POST body must be a valid JSON.',
+                    errorMessage:
+                        'Bad request. POST body must be a valid JSON.',
                 });
             }
+        }
+
+        const { id } = bicycleData;
+
+        try {
+            const bike = await bicycleList.findById(id);
+
+            if (bike) {
+                throw new Error(
+                    `Current id ${id} is already being used in the database.`,
+                );
+            }
+        } catch (e) {
+            return makeHttpError({
+                statusCode: 409,
+                errorMessage: e.message,
+            });
         }
 
         try {

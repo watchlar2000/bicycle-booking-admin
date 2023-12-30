@@ -1,6 +1,10 @@
 import { InvalidPropertyError } from '../helpers/errors.js';
 import { ObjectId } from 'mongodb';
-import { propertyRequired, toFixedNumber, upperFirst } from '../helpers/common.js';
+import {
+    propertyRequired,
+    toFixedNumber,
+    upperFirst,
+} from '../helpers/common.js';
 
 export function makeBicycle(bicycleData = propertyRequired('bicycleData')) {
     const validBicycle = validate(bicycleData);
@@ -21,23 +25,33 @@ function validate(bicycleData) {
 
 function validateTextField(field, input) {
     if (typeof input === 'string' && input.length < 5) {
-        throw new InvalidPropertyError(`"${field}" must be at least 5 characters long`);
+        throw new InvalidPropertyError(
+            `"${field}" must be at least 5 characters long.`,
+        );
     }
 }
 
 function validateNumberField(field, input) {
     if (isNaN(input)) {
-        throw new InvalidPropertyError(`"${field}" must be a number`);
+        throw new InvalidPropertyError(`"${field}" must be a number.`);
     }
 }
 
 function validateId(field, id) {
     if (!ObjectId.isValid(id)) {
-        throw new InvalidPropertyError(`"${field}" must be a 12-byte string`);
+        throw new InvalidPropertyError(`"${field}" is not valid.`);
     }
 }
 
-function normalize({ name, type, color, wheel_size, price, description, ...other }) {
+function normalize({
+    name,
+    type,
+    color,
+    wheel_size,
+    price,
+    description,
+    ...other
+}) {
     return {
         ...other,
         name: upperFirst(name),

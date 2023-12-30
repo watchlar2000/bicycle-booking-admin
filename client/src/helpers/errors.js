@@ -1,5 +1,6 @@
 export const errorMessage = {
-    id: 'ID must be a 12-byte string',
-    text: 'This field must be at least 5-character long',
-    number: 'This field must be a number',
+    id: (id = 'ID') => `${id} must be a 12-byte string`,
+    text: (textField = 'field') =>
+        `${textField} must be at least 5 characters long`,
+    number: (numberField = 'field') => `${numberField} must be a valid number`,
 };

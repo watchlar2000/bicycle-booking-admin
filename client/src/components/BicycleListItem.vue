@@ -1,6 +1,8 @@
 <script setup>
 import { status } from '@/helpers/constants.js';
 import { ref } from 'vue';
+import IconClose from '@/components/shared/IconClose.vue';
+import IconWrapper from '@/components/shared/IconWrapper.vue';
 
 const statusOptionsList = Object.values(status);
 
@@ -26,37 +28,49 @@ const emitDeleteItem = ({ id }) => {
 </script>
 
 <template>
-    <li class='list__item'>
-        <div class='col-1'>
-            <p class='item__title'>
+    <li class="list__item">
+        <div class="col-1">
+            <p class="item__title">
                 <span>{{ name }}</span> - {{ type }} ({{ color }})
             </p>
-            <p class='item__id'>
-                ID: {{ id }}
-            </p>
-            <div class='item__status'>
+            <p class="item__id">ID: {{ id }}</p>
+            <div class="item__status">
                 <span> Status:</span>
-                <select v-model='selectedStatusOption' :data-id='id'
-                        class='item__select' @change='emitStatusChange({id: props.id, status: selectedStatusOption})'>
-                    <option v-for='option in statusOptionsList' :key='`${option}`'>
+                <select
+                    v-model="selectedStatusOption"
+                    :data-id="id"
+                    class="item__select"
+                    @change="
+                        emitStatusChange({
+                            id: props.id,
+                            status: selectedStatusOption,
+                        })
+                    "
+                >
+                    <option
+                        v-for="option in statusOptionsList"
+                        :key="`${option}`"
+                    >
                         {{ option }}
                     </option>
                 </select>
             </div>
         </div>
-        <div class='col-2'>
-            <button @click='emitDeleteItem({id})'>Delete</button>
-            <p class='item__price'>
-                {{ price }} UAH/hr.
-            </p>
+        <div class="col-2">
+            <IconWrapper
+                aria-label="Delete bicycle"
+                @click="emitDeleteItem({ id })"
+            >
+                <IconClose />
+            </IconWrapper>
+            <p class="item__price">{{ price }} UAH/hr.</p>
         </div>
-
     </li>
 </template>
 
 <style>
 .list__item {
-    background-color: #E8E8E8;
+    background-color: #e8e8e8;
     border: 2px solid;
     border-radius: 10px;
     display: flex;
