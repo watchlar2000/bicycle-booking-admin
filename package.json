@@ -1,0 +1,31 @@
+{
+  "name": "bicycle-booking",
+  "version": "1.0.0",
+  "description": "We need to create an admin panel for a company that provides bicycle booking services.",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd server && npm run start",
+    "install-all": "npm run install-client && npm run install-server",
+    "install-client": "cd client && npm install",
+    "install-server": "cd server && npm install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/watchlar2000/bicycle-booking-admin.git"
+  },
+  "keywords": [
+    "bicycle",
+    "booking",
+    "admin",
+    "express",
+    "vue",
+    "2023",
+    "keenethics"
+  ],
+  "author": "Sergii Kochetov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/watchlar2000/bicycle-booking-admin/issues"
+  },
+  "homepage": "https://github.com/watchlar2000/bicycle-booking-admin#readme"
+}
