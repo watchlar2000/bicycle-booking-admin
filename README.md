@@ -2,6 +2,9 @@
 
 Hi and thank you for stopping by!
 
+[Self-presentation video - part 1](https://www.loom.com/share/3ad5ee193f644177b8aaa69f74a37b69?sid=282015d3-b2db-4eba-abe7-03250e9f2fd5)
+[Demo app video - part 2](https://www.loom.com/share/b9c3855ccc5d488ab7e0ceb1e4646203?sid=5faf5d92-72ba-46cb-a3af-93512a132d7d)
+
 ## 💿 Installation
 
 From the root folder, run the following:

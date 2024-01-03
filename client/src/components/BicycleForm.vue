@@ -55,8 +55,6 @@ const validateFormData = () => {
     for (const [key, value] of Object.entries(toRaw(formData))) {
         switch (key) {
             case 'price':
-                errors[key] = validateNumberField(value);
-                break;
             case 'wheel_size':
                 errors[key] = validateNumberField(value);
                 break;

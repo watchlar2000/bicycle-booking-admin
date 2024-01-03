@@ -1,7 +1,8 @@
 import {
-    MINIMUM_ID_LENGTH,
+    ID_FIELD_LENGTH,
     MINIMUM_TEXT_FIELD_LENGTH,
 } from '@/helpers/constants.js';
+import { normalizeString } from '@/helpers/utils.js';
 
 export const checkIfErrorsExisting = (obj) => {
     for (const key in obj) {
@@ -13,15 +14,22 @@ export const checkIfErrorsExisting = (obj) => {
 };
 
 export const validateTextField = (input) => {
-    return !(
-        typeof input === 'string' && input.length < MINIMUM_TEXT_FIELD_LENGTH
+    return (
+        typeof input === 'string' &&
+        input.trim().length >= MINIMUM_TEXT_FIELD_LENGTH
     );
 };
 
 export const validateNumberField = (input) => {
-    return !isNaN(Number(input)) && input !== '';
+    const inputNormalized = normalizeString(input);
+    return !isNaN(Number(inputNormalized)) && inputNormalized !== '';
 };
 
-export const validateId = (input) => {
-    return !(input.length < MINIMUM_ID_LENGTH);
+export const validateId = (id) => {
+    const idTrimmed = id.trim();
+    return (
+        typeof idTrimmed === 'string' &&
+        idTrimmed.length === ID_FIELD_LENGTH &&
+        !/\s/.test(idTrimmed)
+    );
 };

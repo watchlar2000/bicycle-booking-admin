@@ -10,9 +10,13 @@ export const generateErrorObj = () => {
 };
 
 export const toHex = (str) => {
-    var result = '';
-    for (var i = 0; i < str.length; i++) {
+    let result = '';
+    for (let i = 0; i < str.length; ++i) {
         result += str.charCodeAt(i).toString(16);
     }
     return result;
+};
+
+export const normalizeString = (str) => {
+    return str.trim().replace(/\s+/g, ' ');
 };
